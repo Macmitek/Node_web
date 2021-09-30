@@ -6,7 +6,7 @@
     border-bottom: 1px solid #ccc;
     padding: 0.25em 0.5em;
     font-weight: bold;
-    background-color: rgb(26, 211, 186);
+    background-color: #eee;
   }
 
   .contest-name {
@@ -16,4 +16,9 @@
 
 .link {
   cursor: pointer;
+}
+
+.home-link {
+  margin-top: 1em;
+  color: #0000ee;
 }

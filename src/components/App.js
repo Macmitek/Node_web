@@ -7,14 +7,24 @@ import PropTypes from 'prop-types';
 
 const pushState = (obj, url) => window.history.pushState(obj, '', url);
 
+const onPopState = (handler) => {
+  window.onpopstate = handler;
+};
+
 class App extends React.Component {
   static propTypes = {
     initialData: PropTypes.object.isRequired,
   };
   state = this.props.initialData;
-  componentDidMount() {}
+  componentDidMount() {
+    onPopState((event) => {
+      this.setState({
+        currentContestId: (event.state || {}).currentContestId,
+      });
+    });
+  }
   componentWillUnmount() {
-    // clean timers, listeners
+    onPopState(null);
   }
   fetchContest = (contestId) => {
     pushState({ currentContestId: contestId }, `/contest/${contestId}`);
@@ -22,9 +32,18 @@ class App extends React.Component {
       this.setState({
         currentContestId: contest.id,
         contests: {
-          ...this.state.cotests,
+          ...this.state.contests,
           [contest.id]: contest,
         },
+      });
+    });
+  };
+  fetchContestList = () => {
+    pushState({ currentContestId: null }, '/');
+    api.fetchContestList().then((contests) => {
+      this.setState({
+        currentContestId: null,
+        contests,
       });
     });
   };
@@ -40,7 +59,12 @@ class App extends React.Component {
   }
   currentContent() {
     if (this.state.currentContestId) {
-      return <Contest {...this.currentContest()} />;
+      return (
+        <Contest
+          contestListClick={this.fetchContestList}
+          {...this.currentContest()}
+        />
+      );
     }
 
     return (
