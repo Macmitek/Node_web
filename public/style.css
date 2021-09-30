@@ -8,3 +8,6 @@
     background-color: #1ad3ba; }
   .ContestPreview .contest-name {
     padding: 0.5em; }
+
+.link {
+  cursor: pointer; }
