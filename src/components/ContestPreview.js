@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class ContestPreview extends Component {
   handleClick = () => {
-    this.props.onClick(this.props.id);
+    this.props.onClick(this.props._id);
   };
   render() {
     return (
@@ -16,7 +16,7 @@ class ContestPreview extends Component {
 }
 
 ContestPreview.propTypes = {
-  id: PropTypes.number.isRequired,
+  _id: PropTypes.number.isRequired,
   categoryName: PropTypes.string.isRequired,
   contestName: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,

@@ -1,12 +1,13 @@
 import express from 'express';
-import { MongoClient, ObjectID } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import assert from 'assert';
 import config from '../config';
 
 let mdb;
-MongoClient.connect(config.mongodbUrl, (err, db) => {
+MongoClient.connect(config.mongodbUrl, (err, client) => {
   assert.equal(null, err);
-  mdb = db;
+
+  mdb = client.db('test');
 });
 
 const router = express.Router();
@@ -34,7 +35,7 @@ router.get('/contests', (req, res) => {
 });
 
 router.get('/names/:nameIds', (req, res) => {
-  const nameIds = req.params.nameIds.split(',').map(ObjectID);
+  const nameIds = req.params.nameIds.split(',').map(ObjectId);
   let names = {};
   mdb
     .collection('names')
@@ -55,7 +56,7 @@ router.get('/names/:nameIds', (req, res) => {
 router.get('/contests/:contestId', (req, res) => {
   mdb
     .collection('contests')
-    .findOne({ _id: ObjectID(req.params.contestId) })
+    .findOne({ _id: ObjectId(req.params.contestId) })
     .then((contest) => res.send(contest))
     .catch((error) => {
       console.error(error);
@@ -64,7 +65,7 @@ router.get('/contests/:contestId', (req, res) => {
 });
 
 router.post('/names', (req, res) => {
-  const contestId = ObjectID(req.body.contestId);
+  const contestId = ObjectId(req.body.contestId);
   const name = req.body.newName;
   // validation ...
   mdb
